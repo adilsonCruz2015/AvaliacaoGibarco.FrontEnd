@@ -23,6 +23,7 @@ export class ClienteServico {
 
         let body = new HttpParams();
         body = HttpParamsHelper.setObject(body, params);
+        console.log(body);
 
         return this.http.get<Cliente[]>(`${AppConfig.api}/cliente`, {
             params : body,
@@ -46,7 +47,7 @@ export class ClienteServico {
 
 interface FiltrarParams {
     cnpj?: string[] | string;
-    razaSocial?: string[] | string;
+    razaoSocial?: string[] | string;
     pais?: string[] | string;
 }
 

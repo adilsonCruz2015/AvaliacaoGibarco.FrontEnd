@@ -47,7 +47,7 @@ export class ClienteBuscaComponent implements OnInit {
     this.naoEncontrado = false;
     this.clienteServico.filtrar({
       cnpj: this.buscaForm.value.cnpj,
-      razaSocial: this.buscaForm.value.razaoSocial,
+      razaoSocial: this.buscaForm.value.razaoSocial,
       pais: this.buscaForm.value.pais
     }).pipe(
       catchError((error: HttpErrorResponse) => {
