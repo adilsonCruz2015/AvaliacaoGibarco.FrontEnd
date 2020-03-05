@@ -1,0 +1,58 @@
+<div class="container main-container">
+    <h4>Cadastro de Cliente</h4>
+    <hr />
+    <form novalidate (ngSubmit)="onSubmit()" [formGroup]="cadastroForm">
+        <div class="form-horizontal">
+
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="nome">CNPJ</label>
+                <div class="col-md-10">
+                    <input class="form-control" id="cnpj" type="text" placeholder="CNPJ (requerido)"
+                        formControlName="cnpj" [ngClass]="{'is-invalid': displayMessage.cnpj }" />
+                    <span class="text-danger" *ngIf="displayMessage.cnpj">
+                        <p [innerHTML]="displayMessage.cnpj"></p>
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-2 control-label">Razão Social</label>
+                <div class="col-md-10">
+                    <input class="form-control" id="razaoSocial" type="text"
+                        placeholder="Razão Social (requerido)" formControlName="razaoSocial"
+                        [ngClass]="{'is-invalid': displayMessage.razaoSocial }" />
+                    <span class="text-danger" *ngIf="displayMessage.razaoSocial">
+                        <p [innerHTML]="displayMessage.razaoSocial"></p>
+                    </span>
+                </div>
+            </div>               
+
+            <div class="form-group">
+                <label class="col-md-2 control-label">País</label>
+                <div class="col-md-10">
+                    <select class="form-control custom-select" formControlName="pais"
+                        [ngClass]="{'is-invalid': displayMessage.pais }">
+                        <option>Selecione...</option>
+                        <option *ngFor="let item of paises" [ngValue]="item.codigo">
+                            {{ item.descricao }}
+                        </option>
+                    </select>
+                    <span class="text-danger" *ngIf="displayMessage.pais">
+                        <p [innerHTML]="displayMessage.pais"></p>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="btn-group mr-2" role="group" aria-label="First group">
+                        <button class="btn btn-success" id="Registrar" [disabled]="!cadastroForm.valid"
+                            type="submit">Cadastrar</button>
+                    </div>
+                    <div class="btn-group mr-2" role="group" aria-label="First group">
+                        <button class="btn btn-primary" id="voltar" (click)="goBack()">Voltar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,30 @@
+<div class="container main-container">
+    <h4>Cadastro de Usuários</h4>
+    <hr />
+    <form novalidate (ngSubmit)="onSubmit()" [formGroup]="cadastroForm">
+        <div class="form-horizontal">
+
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="nome">Descrição</label>
+                <div class="col-md-10">
+                    <input class="form-control" id="descricao" type="text" placeholder="Descricao (requerido)"
+                        formControlName="descricao" [ngClass]="{'is-invalid': displayMessage.descricao }" />
+                    <span class="text-danger" *ngIf="displayMessage.descricao">
+                        <p [innerHTML]="displayMessage.descricao"></p>
+                    </span>
+                </div>
+            </div>            
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="btn-group mr-2" role="group" aria-label="First group">
+                        <button class="btn btn-success" id="Registrar" [disabled]="!cadastroForm.valid"
+                            type="submit">Cadastrar</button>
+                    </div>
+                    <div class="btn-group mr-2" role="group" aria-label="First group">
+                        <button class="btn btn-primary" id="voltar" (click)="goBack()">Voltar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
