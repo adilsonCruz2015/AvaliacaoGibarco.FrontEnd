@@ -86,7 +86,7 @@ export class ClienteGerenciaComponent implements OnInit, AfterViewInit {
          })
        ).subscribe(() => {
          this.onReset();
-         this.toastr.success('Cadastro realizado com sucesso!', 'Cadastro Usuário');
+         this.toastr.success('Cadastro realizado com sucesso!', 'Cadastro Cliente');
        });
        this.mudancasNaoSalvas = false;
     }
