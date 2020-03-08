@@ -1,2 +1,6 @@
 <app-menu></app-menu>
+<div *ngIf="estaComProblemas" class="alert alert-warning" role="alert">
+    <span><i class="fa fa-warning"></i>&nbsp;</span>
+    <span>Os recursos estão indisponíveis no momento, aguarde.</span>
+</div>
 <router-outlet></router-outlet>

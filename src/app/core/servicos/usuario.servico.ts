@@ -30,6 +30,6 @@ export class UsuarioServico {
 }
 
 interface LogarParams {
-  email?: string;
+  login?: string;
   senha?: string;
 }

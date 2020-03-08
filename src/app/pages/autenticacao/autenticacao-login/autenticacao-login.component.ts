@@ -9,8 +9,8 @@ import { ToastrService } from 'ngx-toastr';
 import { Usuario } from 'src/app/core/modelos/usuario.model';
 
 import { ValidationMessages, GenericValidator, DisplayMessage } from 'src/app/core/modelos/generic-form-validation';
-import { UsuarioServico } from 'src/app/core/servicos/usuario.servico';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { AutenticacaoService } from '@app/core/servicos/autenticacao.service';
 
 @Component({
   selector: 'app-autenticacao-login',
@@ -18,23 +18,22 @@ import { Router } from '@angular/router';
   styleUrls: ['./autenticacao-login.component.css']
 })
 
-
 export class AutenticacaoLoginComponent implements OnInit {
 
     @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
 
 cadastroForm: FormGroup;
-usuario: Usuario;
-
 validationMessages: ValidationMessages;
 genericValidator: GenericValidator;
 displayMessage: DisplayMessage = {};
 mudancasNaoSalvas: boolean;
+private url;
 
 constructor(private fb: FormBuilder,
-            private usuarioServico: UsuarioServico,
+            private autenticacao: AutenticacaoService,
             private toastr: ToastrService,
-            public router: Router) {
+            public router: Router,
+            public route: ActivatedRoute,) {
 
   this.validationMessages = {
     senha: {
@@ -61,9 +60,11 @@ ngAfterViewInit(): void {
 }
 
 ngOnInit() {
+  this.url = atob(this.route.snapshot.params['origem'] || btoa('/'));
 
+  this.autenticacao.sair();
   this.cadastroForm = this.fb.group({
-    email: ['', [Validators.email]],
+    login: ['', [Validators.email]],
     senha: ['']
   });
 
@@ -72,8 +73,8 @@ ngOnInit() {
 onSubmit() {
   if (this.cadastroForm.dirty && this.cadastroForm.valid) {
 
-    this.usuarioServico.logar({
-      email: this.cadastroForm.get('email').value,
+    this.autenticacao.autenticar({
+      login: this.cadastroForm.get('login').value,
       senha: this.cadastroForm.get('senha').value,
       }).pipe(
         catchError((error: HttpErrorResponse) => {
@@ -85,7 +86,7 @@ onSubmit() {
         })
       ).subscribe(() => {
         this.onReset();
-        this.router.navigate(['/cliente']);
+        this.router.navigate([this.url]);
       });
 
     this.mudancasNaoSalvas = false;
@@ -100,4 +101,4 @@ goBack(): void {
   this.router.navigate(['/usuario']);
 }
   
-  }
+}

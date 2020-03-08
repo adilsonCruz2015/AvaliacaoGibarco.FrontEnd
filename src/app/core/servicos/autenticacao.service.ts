@@ -4,10 +4,10 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Autenticacao } from '../modelos/autenticacao.model';
 import { Usuario } from '../modelos/usuario.model';
-import { Observable } from 'rxjs';
+import { Observable, EMPTY } from 'rxjs';
 import { AppConfig } from 'src/app/app.config';
 import { HttpParamsHelper } from '../helpers/http-params-helper';
-import { tap } from 'rxjs/operators';
+import { tap, take } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -20,7 +20,9 @@ export class AutenticacaoService {
     private autenticacao: Autenticacao = null;
 
     /** É disparado quando os dados do serviços são zerados */
-  readonly eventSaida: EventEmitter<boolean> = new EventEmitter();
+    readonly eventSaida: EventEmitter<boolean> = new EventEmitter();
+    /** É disparado quando os dados do serviços sõa atualizados. */
+    private readonly eventEntrada: EventEmitter<boolean> = new EventEmitter();
 
     get autenticado(): boolean {
         return !!this.autenticacao;
@@ -45,9 +47,8 @@ export class AutenticacaoService {
     sair(emit = true) {
         this.autenticacao = null;
         this.storage.removeCookie('token');
-
-        if(emit) {
-            this.eventSaida.emit(true);
+        if (emit) {
+          this.eventSaida.emit(true);
         }
     }
 
@@ -67,11 +68,44 @@ export class AutenticacaoService {
         return this.http.post<any>(`${AppConfig.api}/autenticacao`, body, { headers: headers })
         .pipe(
             tap((dados: Autenticacao) => {
-                this.aplicar(dados);
+                this.aplicar(dados['data']);
             })
         );
     }
 
+    restaurar(ignoreLoading?: boolean): Observable<boolean> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/x-www-form-urlencoded'
+        });
+        this.http.get<any>(`${AppConfig.api}/autenticacao`, { headers : headers })
+        .pipe(
+          tap((dados: Autenticacao) => {
+            this.aplicar(dados);
+          }),
+          take(1)
+        ).subscribe(success => {
+          this.eventEntrada.emit(true);
+        }, error => {
+          this.eventEntrada.emit(false);
+          this.sair();
+          return EMPTY;
+        });
+    
+        return this.eventEntrada.pipe(take(1));
+    
+      }
+
+    checarRestaurar(ignoreLoading?: boolean): Observable<boolean> {
+        const delay = setTimeout(() => {
+          clearInterval(delay);
+          if (!this.autenticado) {
+            this.restaurar();
+          } else {
+            this.eventEntrada.emit(true);
+          }
+        }, 1);
+        return this.eventEntrada.pipe(take(1));
+      }
 }
 
 interface AutenticarParam {
