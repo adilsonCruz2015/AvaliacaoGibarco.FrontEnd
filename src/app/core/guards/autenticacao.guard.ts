@@ -22,7 +22,6 @@ export class AutenticacaoGuard implements CanActivate, CanLoad {
     canLoad(
         route: Route
        ): Observable<boolean> | boolean {
-      
         return this.autenticacao.checarRestaurar().pipe(take(1))
     }
 }

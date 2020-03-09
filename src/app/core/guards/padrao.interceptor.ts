@@ -13,7 +13,7 @@ export class PadraoInterceptor implements HttpInterceptor {
 
   constructor(
     private injector: Injector,
-    private notificacao: NotificacaoService) {    
+    private notificacao: NotificacaoService) {
         this.autenticacao = this.injector.get(AutenticacaoService);
   }
 
@@ -43,9 +43,7 @@ export class PadraoInterceptor implements HttpInterceptor {
     }
 
     return next.handle(request).pipe(
-      finalize(() => {
-        
-      }),
+      finalize(() => {  }),
       catchError((error: HttpErrorResponse) => {
         if (error instanceof HttpErrorResponse) {
           if (error.status === 0) {

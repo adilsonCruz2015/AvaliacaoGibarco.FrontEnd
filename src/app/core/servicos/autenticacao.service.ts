@@ -80,7 +80,7 @@ export class AutenticacaoService {
         this.http.get<any>(`${AppConfig.api}/autenticacao`, { headers : headers })
         .pipe(
           tap((dados: Autenticacao) => {
-            this.aplicar(dados);
+            this.aplicar(dados['data']);
           }),
           take(1)
         ).subscribe(success => {
@@ -90,9 +90,9 @@ export class AutenticacaoService {
           this.sair();
           return EMPTY;
         });
-    
+
         return this.eventEntrada.pipe(take(1));
-    
+
       }
 
     checarRestaurar(ignoreLoading?: boolean): Observable<boolean> {

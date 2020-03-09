@@ -41,8 +41,8 @@ constructor(private fb: FormBuilder,
       minlength: 'O Senha precisa ter no mínimo 3 caracteres',
       maxlength: 'O Senha precisa ter no máximo 20 caracteres'
     },
-    email: {
-      email: 'Email inválido'
+    login: {
+      login: 'Email inválido'
     }
   };
 
